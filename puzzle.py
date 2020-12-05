@@ -6,6 +6,8 @@ def day1():
     digits = data.day1()
     digits.sort()
     digit_map = dict((digit, index) for index, digit in enumerate(digits))
+
+    print("\n****************************************************")
     print("\nDay 1: Part 1")
     for current_index, current_digit in enumerate(digits):
         if 2020 - current_digit in digit_map and digit_map[2020 - current_digit] != current_index:
@@ -73,6 +75,7 @@ def day2():
         else:
             invalid_none_part2 += 1
 
+    print("\n****************************************************")
     print("\nDay 2: Part 1")
     print("Valid: {}".format(valid_part1))
     print("Invalid: {}".format(invalid_part1))
@@ -87,6 +90,8 @@ def day2():
 
 def day3():
     geology = data.day3()
+
+    print("\n****************************************************")
     print("\nDay 3: Part 1")
     num_trees = 0
     num_open_spaces = 0
@@ -181,6 +186,7 @@ def day4():
         if all(k in passport for k in ('byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid')):
             num_valid_passports += 1
 
+    print("\n****************************************************")
     print("\nDay 4: Part 1")
     print("Total Passports: {}".format(len(single_passports)))
     print("Valid Passports: {}".format(num_valid_passports))
@@ -197,7 +203,6 @@ def day4():
             if "cm" not in passport['hgt'] and "in" not in passport['hgt']:
                 continue
             if "cm" in passport['hgt'] and (int(passport['hgt'].replace("cm", "")) < 150 or int(passport['hgt'].replace("cm", "")) > 193):
-                print(passport['hgt'])
                 continue
             if "in" in passport['hgt'] and (int(passport['hgt'].replace("in", "")) < 59 or int(passport['hgt'].replace("in", "")) > 76):
                 continue
@@ -256,6 +261,8 @@ def day5():
         seat_ids.append(seat_id)
 
     seat_ids.sort()
+
+    print("\n****************************************************")
     print("\nDay 5: Part 1")
     print("Total Seat IDs: {}".format(len(seat_strings)))
     print("Max Seat ID: {}".format(seat_ids[-1]))
@@ -267,5 +274,14 @@ def day5():
         print("Missing Seat ID: {}".format(seat_id))
 
 
+def day6():
+    data = data.day6()
+
+
 if __name__ == '__main__':
-    day5()
+    # day1()
+    # day2()
+    # day3()
+    # day4()
+    # day5()
+    day6()
