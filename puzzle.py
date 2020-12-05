@@ -275,7 +275,7 @@ def day5():
 
 
 def day6():
-    data = data.day6()
+    current_data = data.day6()
 
 
 if __name__ == '__main__':
