@@ -3327,3 +3327,9 @@ def day5():
         "BFFFBBBLLL",
         "FFBBBFBRLL",
     ]
+
+
+def day6():
+    return [
+        
+    ]
