@@ -268,14 +268,63 @@ def day5():
     print("Max Seat ID: {}".format(seat_ids[-1]))
     print("\nDay 5: Part 2")
 
-    all_ids = set([i for i in range(81, 856)])
+    all_ids = set([i for i in range(seat_ids[0], seat_ids[-1] + 1)])
     missing_seat_ids = all_ids - set(seat_ids)
     for i, missing_seat_id in enumerate(missing_seat_ids):
         print("Missing Seat ID: {}".format(seat_id))
 
 
 def day6():
-    current_data = data.day6()
+    customs = data.day6()
+
+    current_group = {}
+    current_person_count = 0
+    answer_count = []
+    consensus_count = []
+    for index, line in enumerate(customs):
+        if line == "":            
+            answer_count.append(len(current_group))
+
+            current_consensus_count = 0
+            for key, value in current_group.items():
+                if value == current_person_count:
+                    current_consensus_count += 1            
+            consensus_count.append(current_consensus_count)
+
+            current_group.clear()
+            current_person_count = 0
+        else:
+            current_person_count += 1
+            for char in line.strip():
+                if char == " ":
+                    continue
+                if char in current_group:
+                    current_group[char] += 1
+                else:
+                    current_group[char] = 1
+
+        if index == len(customs) - 1:
+            answer_count.append(len(current_group))
+
+            current_consensus_count = 0
+            for key, value in current_group.items():
+                if value == current_person_count:
+                    current_consensus_count += 1            
+            consensus_count.append(current_consensus_count)
+
+            current_group.clear()
+            current_person_count = 0
+
+    print("\n****************************************************")
+    print("\nDay 5: Part 1")
+    print("Answer Count: {}".format(sum(answer_count)))
+
+    print("\nDay 5: Part 2")
+    print("Consensus Count: {}".format(sum(consensus_count)))
+
+
+def day7():
+    current = data.day7()
 
 
 if __name__ == '__main__':
@@ -284,4 +333,5 @@ if __name__ == '__main__':
     # day3()
     # day4()
     # day5()
-    day6()
+    # day6()
+    day7()
