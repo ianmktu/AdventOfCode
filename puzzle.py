@@ -407,13 +407,87 @@ def day7():
 
 
 def day8():
-    puzzle_input = data.day8()
+    game_code = data.day8()
+
+    index_count_set = set()
+    index = 0
+    accumulator_value = 0
+    while True:
+        if index in index_count_set:
+            break
+        else:
+            index_count_set.add(index)
+
+        instruction, value = game_code[index].split(" ")
+        if instruction == "acc":
+            index += 1
+            accumulator_value += int(value)
+        elif instruction == "nop":
+            index += 1
+        else:
+            index += int(value)
+
+    fixed_index = 0
+    while True:
+        for i in range(fixed_index, len(game_code)):
+            if instruction == "nop":
+                fixed_index = i 
+                break
+            elif instruction == "nop":
+                fixed_index = i
+                break
+            else:
+                continue
+
+        index_count_set.clear()
+        fixed_accumulator_value = 0        
+        index = 0
+        
+        while True:
+            if index in index_count_set:
+                break
+            elif index == len(game_code):
+                break
+            else:
+                index_count_set.add(index)
+
+            instruction, value = game_code[index].split(" ")
+            if instruction == "acc":
+                index += 1
+                fixed_accumulator_value += int(value)
+            elif instruction == "nop":
+                if index == fixed_index:
+                    index += int(value)
+                else:
+                    index += 1
+            else:
+                if index == fixed_index:
+                    index += 1
+                else:
+                    index += int(value)
+
+
+        if index == len(game_code):
+            break
+        else:
+            fixed_index += 1
 
     print("\n****************************************************")
     print("\nDay 8: Part 1")
-    print("Answer: {}".format(0000))
+    print("Answer: {}".format(accumulator_value))
 
     print("\nDay 8: Part 2")
+    print("Answer: {}".format(fixed_accumulator_value))
+
+
+def day9():
+    puzzle_input = data.day9()
+
+    print("\n****************************************************")
+    print("\nDay 9: Part 1")
+    print("Answer: {}".format(0000))
+
+    print("\nDay 9: Part 2")
     print("Answer: {}".format(0000))
 
 
@@ -424,8 +498,8 @@ if __name__ == '__main__':
     # day4()
     # day5()
     # day6()
-    day7()
-    # day8()
+    # day7()
+    day8()
     # day9()
     # day10()
     # day11()
