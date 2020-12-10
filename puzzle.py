@@ -381,20 +381,20 @@ def day7():
             shiny_names.add(shiny_ancestor_node.name)
     shiny_names.remove("root")
     
-    def get_node_count(current_node, count):   
+    def get_node_count(current_node):   
         if len(current_node.children) == 0:    
             return current_node.count
         else:
             current_total = 0
             for current_child_node in current_node.children:
-                current_total += get_node_count(current_child_node, count) 
+                current_total += get_node_count(current_child_node) 
             current_total *= current_node.count
             current_total += current_node.count
             return current_total 
 
     shiny_count = 0 
     for child_node in shiny_nodes[0].children:
-        shiny_count += get_node_count(child_node, 0)
+        shiny_count += get_node_count(child_node)
 
     print("\n****************************************************")
     print("\nDay 7: Part 1")
@@ -604,14 +604,64 @@ def day9():
 
 
 def day10():
-    puzzle_input = data.day10()
+    jolt_strings = data.day10()
+    jolt_integers =[int(j) for j in jolt_strings]
+    jolt_integers.sort()
+
+    jolt_1 = 0
+    jolt_3 = 1
+    previous_jolt = 0
+    for index, jolt in enumerate(jolt_integers):
+        if jolt - previous_jolt == 1:
+            jolt_1 += 1
+        elif jolt - previous_jolt == 3:
+            jolt_3 += 1        
+        previous_jolt = jolt
+
+    
+    jolt_integers.insert(0, 0)
+    jolt_dict = {}
+    jolt_dict[0] = []
+    for index, current_jolt in enumerate(jolt_integers):
+        for next_index in range(index + 1, len(jolt_integers)):
+            if jolt_integers[next_index] - current_jolt <= 3:
+                if jolt_integers[next_index] not in jolt_dict:
+                    jolt_dict[jolt_integers[next_index]] = []
+                jolt_dict[jolt_integers[next_index]].append(current_jolt)
+            else:
+                break
+
+
+    def get_combo_count(connector_list, jolt_combo_count):   
+        current_combo_count = 0
+        for current_jolt in connector_list:
+            if current_jolt in jolt_combo_count:
+                current_combo_count += jolt_combo_count[current_jolt]
+            else:
+                current_combo_count += get_combo_count(jolt_dict[current_jolt], jolt_combo_count) 
+        return current_combo_count 
+
+
+    jolt_combo_count = {}
+    jolt_combo_count[0] = 1
+
+    for index, current_jolt in enumerate(jolt_integers[1:]):
+        combo_count = 0
+        for parent_jolt in jolt_dict[current_jolt]:
+            if parent_jolt in jolt_combo_count:
+                combo_count += jolt_combo_count[parent_jolt]
+            else:
+                new_combo_count = get_combo_count(jolt_dict[parent_jolt], jolt_combo_count) 
+                jolt_combo_count[parent_jolt] = new_combo_count
+                combo_count += jolt_combo_count[parent_jolt]
+        jolt_combo_count[current_jolt] = combo_count
 
     print("\n****************************************************")
     print("\nDay 10: Part 1")
-    print("Answer: {}".format(0000))
+    print("Answer: {}".format(jolt_1 * jolt_3))
 
     print("\nDay 10: Part 2")
-    print("Answer: {}".format(0000))
+    print("Answer: {}".format(jolt_combo_count[jolt_integers[-1]]))
 
 
 def day11():
@@ -625,6 +675,17 @@ def day11():
     print("Answer: {}".format(0000))
 
 
+def day12():
+    puzzle_input = data.day12()
+
+    print("\n****************************************************")
+    print("\nDay 12: Part 1")
+    print("Answer: {}".format(0000))
+
+    print("\nDay 12: Part 2")
+    print("Answer: {}".format(0000))
+
+
 if __name__ == '__main__':
     # day1()
     # day2()
@@ -635,8 +696,8 @@ if __name__ == '__main__':
     # day7()
     # day7_alt()
     # day8()
-    day9()
-    # day10()
+    # day9()
+    day10()
     # day11()
     # day12()
     # day13()
