@@ -733,15 +733,12 @@ def day11():
             break
 
     seating_array = copy.deepcopy(seating_array_original)
-    loop_count = 0
     while True:
-        loop_count += 1
         previous_seating_array = copy.deepcopy(seating_array)
         for row_index, row in enumerate(previous_seating_array):                       
             for col_index, seat in enumerate(row):           
                 occupied_count = 0
                 
-
                 def is_occupied(y_dir, x_dir):
                     seeing_step = 1
                     while 0 <= row_index + y_dir * seeing_step < len(seating_array) and 0 <= col_index + x_dir * seeing_step < len(row):
@@ -751,6 +748,7 @@ def day11():
                             return False
                         else:
                             seeing_step += 1
+                    return False
 
                 if is_occupied(y_dir=-1, x_dir=-1):
                     occupied_count += 1
