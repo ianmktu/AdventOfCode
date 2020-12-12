@@ -1,12 +1,15 @@
-import numpy as np
-import anytree
 import copy
-from anytree import Node, RenderTree
 import data
+
+import numpy as np
+
+import anytree
+from anytree import Node, RenderTree
 
 
 def day1():
     digits = data.day1()
+    digits = [int(d) for d in digits]
     digits.sort()
     digit_map = dict((digit, index) for index, digit in enumerate(digits))
 
@@ -15,7 +18,7 @@ def day1():
     for current_index, current_digit in enumerate(digits):
         if 2020 - current_digit in digit_map and digit_map[2020 - current_digit] != current_index:
             print(current_digit, 2020 - current_digit)
-            print(current_digit * (2020 - current_digit))
+            print("Answer:", current_digit * (2020 - current_digit))
             break
 
     print("\nDay 1: Part 2")
@@ -37,7 +40,7 @@ def day1():
             if first_index == k or second_index == k:
                 continue
             print(digit_pairs_map[2020 - third_num][0], digit_pairs_map[2020 - third_num][1], third_num)
-            print(digit_pairs_map[2020 - third_num][0] * digit_pairs_map[2020 - third_num][1] * third_num)
+            print("Answer:", digit_pairs_map[2020 - third_num][0] * digit_pairs_map[2020 - third_num][1] * third_num)
             break
 
 
@@ -113,8 +116,8 @@ def day3():
         else:
             num_open_spaces += 1
 
-    print("Total Trees 3-1: {}".format(num_trees))
     print("Total Open Spaces: {}".format(num_open_spaces))
+    print("Total Trees 3-1: {}".format(num_trees))
 
     print("\nDay 3: Part 2")
     num_trees_1_1 = 0
@@ -319,11 +322,12 @@ def day6():
             current_person_count = 0
 
     print("\n****************************************************")
-    print("\nDay 5: Part 1")
+    print("\nDay 6: Part 1")
     print("Answer Count: {}".format(sum(answer_count)))
 
-    print("\nDay 5: Part 2")
+    print("\nDay 6: Part 2")
     print("Consensus Count: {}".format(sum(consensus_count)))
+    print("\n****************************************************")
 
 
 def day7():
@@ -403,6 +407,7 @@ def day7():
 
     print("\nDay 7: Part 2")
     print("In Shiny Gold Bag Count: {}".format(shiny_count))
+    print("\n****************************************************")
 
 
 def day7_alt():
@@ -467,6 +472,7 @@ def day7_alt():
 
     print("\nDay 7: Part 2")
     print("In Shiny Gold Bag Count: {}".format(len(descendant_root_node.descendants)))
+    print("\n****************************************************")
 
 
 def day8():
@@ -541,6 +547,7 @@ def day8():
 
     print("\nDay 8: Part 2")
     print("Answer: {}".format(fixed_accumulator_value))
+    print("\n****************************************************")
 
 
 def day9():
@@ -602,6 +609,7 @@ def day9():
 
     print("\nDay 9: Part 2")
     print("Answer: {}".format(min_value + max_value))
+    print("\n****************************************************")
 
 
 def day10():
@@ -663,6 +671,7 @@ def day10():
 
     print("\nDay 10: Part 2")
     print("Answer: {}".format(jolt_combo_count[jolt_integers[-1]]))
+    print("\n****************************************************")
 
 
 def day11():
@@ -800,6 +809,7 @@ def day11():
 
     print("\nDay 11: Part 2")
     print("Answer: {}".format(final_occupied_count_2))
+    print("\n****************************************************")
 
 
 def day12():
@@ -941,6 +951,7 @@ def day12():
 
     print("\nDay 12: Part 2")
     print("Answer: {}".format(abs(current_north) + abs(current_east)))
+    print("\n****************************************************")
 
 
 def day13():
@@ -952,6 +963,19 @@ def day13():
 
     print("\nDay 13: Part 2")
     print("Answer: {}".format(0000))
+    print("\n****************************************************")
+
+
+def day14():
+    puzzle_input = data.day14()
+
+    print("\n****************************************************")
+    print("\nDay 14: Part 1")
+    print("Answer: {}".format(0000))
+
+    print("\nDay 14: Part 2")
+    print("Answer: {}".format(0000))
+    print("\n****************************************************")
 
 
 if __name__ == '__main__':
@@ -967,8 +991,8 @@ if __name__ == '__main__':
     # day9()
     # day10()
     # day11()
-    day12()
-    # day13()
+    # day12()
+    day13()
     # day14()
     # day15()
     # day16()
