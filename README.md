@@ -1,8 +1,8 @@
 # Advent of Code 2020
 ## Solutions
 There are two ways to view the solutions:
-* Folder view - Each solution exists in a separate folder for each day, this folder contains the question, the data input and the solution code.
-* All in one view - You can view all the solutions inside the file `puzzle.py`, the data for each of the questions also exist in a single file called `data.py`.
+* **Folder view** - Each solution exists in a separate folder for each day, this folder contains the question, the data input and the solution code.
+* **All in one view** - You can view all the solutions inside the file `puzzle.py`, the data for each of the questions also exist in a single file called `data.py`.
 
 ### Folder view
 * Three files
