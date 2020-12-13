@@ -974,7 +974,6 @@ def day13():
                 if count < earliest_time:
                     earliest_time = count
                     found_bus_id = bus_id
-                print(earliest_time, timestamp, count, bus_id)
                 break
             else:
                 count += 1
