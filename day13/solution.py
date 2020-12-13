@@ -1,5 +1,8 @@
 import numpy as np
 
+from math import gcd
+from functools import reduce 
+
 def day13():
     lines = [line.rstrip() for line in open('input.txt')]
 
@@ -52,21 +55,18 @@ def day13():
 
             found_time += increment
         return -1
-
-    def multiply_list(input):
-        result = 1
-        for x in input:
-            result *= x
-        return result
+    
+    def lcm(denominators):
+        return reduce(lambda a,b: a*b // gcd(a,b), denominators)
 
     found_time = 0
     for i in range(1, len(bus_id_min_offset)):
-        current_bus_ids = [bus_id for bus_id, _ in bus_id_min_offset[0:i-1]]
+        current_bus_ids = [bus_id for bus_id, _ in bus_id_min_offset[0:i]]
+        if len(current_bus_ids) == 1:
+            current_bus_ids *= 2 
         found_time = find_time(input_bus_id_min_offset=bus_id_min_offset[0:i+1],
                                start_time=found_time,
-                               increment=multiply_list(current_bus_ids))
-
-        print(i, multiply_list(current_bus_ids), current_bus_ids, found_time)
+                               increment=lcm(current_bus_ids))
 
     print("\n****************************************************")
     print("\nDay 13: Part 1")
