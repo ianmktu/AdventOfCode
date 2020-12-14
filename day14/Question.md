@@ -1,70 +1,112 @@
-# Day 12: Rain Risk 
+# Day 14 Docking Data
 ## Part 1
-Your ferry made decent progress toward the island, but the storm came in faster than anyone expected. The ferry needs to take evasive actions!
+As your ferry approaches the sea port, the captain asks for your help again. The computer system that runs this port isn't compatible with the docking program on the ferry, so the docking parameters aren't being correctly initialized in the docking program's memory.
 
-Unfortunately, the ship's navigation computer seems to be malfunctioning; rather than giving a route directly to safety, it produced extremely circuitous instructions. When the captain uses the PA system to ask if anyone can help, you quickly volunteer.
+After a brief inspection, you discover that the sea port's computer system uses a strange bitmask system in its initialization program. Although you don't have the correct decoder chip handy, you can emulate it in software!
 
-The navigation instructions (your puzzle input) consists of a sequence of single-character actions paired with integer input values. After staring at them for a few minutes, you work out what they probably mean:
+The initialization program (your puzzle input) can either update the bitmask or write a value to memory. Values and memory addresses are both 36-bit unsigned integers. For example, ignoring bitmasks for a moment, a line like mem[8] = 11 would write the value 11 to memory address 8.
 
-- Action `N` means to move `north` by the given value.
-- Action `S` means to move `south` by the given value.
-- Action `E` means to move `east` by the given value.
-- Action `W` means to move `west` by the given value.
-- Action `L` means to turn `left` the given number of degrees.
-- Action `R` means to turn `right` the given number of degrees.
-- Action `F` means to move `forward` by the given value in the direction the ship is currently facing.
+The bitmask is always given as a string of 36 bits, written with the most significant bit (representing 2^35) on the left and the least significant bit (2^0, that is, the 1s bit) on the right. The current bitmask is applied to values immediately before they are written to memory: a 0 or 1 overwrites the corresponding bit in the value, while an X leaves the bit in the value unchanged.
 
-The ship starts by facing east. Only the `L` and `R` actions change the direction the ship is facing. (That is, if the ship is facing east and the next instruction is N10, the ship would move north 10 units, but would still move east if the following action were F.)
-
-For example:
+For example, consider the following program:
 ```
-F10
-N3
-F7
-R90
-F11
+mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+mem[8] = 11
+mem[7] = 101
+mem[8] = 0
 ```
+This program starts by specifying a bitmask (mask = ....). The mask it specifies will overwrite two bits in every written value: the 2s bit is overwritten with 0, and the 64s bit is overwritten with 1.
 
-These instructions would be handled as follows:
-* `F10` would move the ship `10 units east` (because the ship starts by facing east) to `east 10`, `north 0`.
-* `N3` would move the ship 3 units north to `east 10`, `north 3`.
-* `F7` would move the ship another 7 units east (because the ship is still facing east) to `east 17`, `north 3`.
-* `R90` would cause the ship to turn right by 90 degrees and face south; it remains at `east 17`, `north 3`.
-* `F11` would move the ship 11 units south to `east 17`, `south 8`.
-
-At the end of these instructions, the ship's **Manhattan distance** (sum of the absolute values of its east/west position and its north/south position) from its starting position is `17 + 8 = 25`.
-
-Figure out where the navigation instructions lead. What is the Manhattan distance between that location and the ship's starting position?
-
+The program then attempts to write the value 11 to memory address 8. By expanding everything out to individual bits, the mask is applied as follows:
 ```
-Your puzzle answer was 2270.
+value:  000000000000000000000000000000001011  (decimal 11)
+mask:   XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+result: 000000000000000000000000000001001001  (decimal 73)
 ```
 
-## Part 2 
-Before you can give the destination to the captain, you realize that the actual action meanings were printed on the back of the instructions the whole time.
+So, because of the mask, the value 73 is written to memory address 8 instead. Then, the program tries to write 101 to address 7:
+```
+value:  000000000000000000000000000001100101  (decimal 101)
+mask:   XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+result: 000000000000000000000000000001100101  (decimal 101)
+```
 
-Almost all of the actions indicate how to move a waypoint which is relative to the ship's position:
-- Action `N` means to move the waypoint `north` by the given value.
-- Action `S` means to move the waypoint `south` by the given value.
-- Action `E` means to move the waypoint `east` by the given value.
-- Action `W` means to move the waypoint `west` by the given value.
-- Action `L` means to rotate the waypoint around the ship `left` (`counter-clockwise`) the given number of degrees.
-- Action `R` means to rotate the waypoint around the ship `right` (`clockwise`) the given number of degrees.
-- Action `F` means to move `forward` to the waypoint a number of times equal to the given value.
+This time, the mask has no effect, as the bits it overwrote were already the values the mask tried to set. Finally, the program tries to write 0 to address 8:
+```
+value:  000000000000000000000000000000000000  (decimal 0)
+mask:   XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X
+result: 000000000000000000000000000001000000  (decimal 64)
+```
 
-The waypoint starts `10 units east` and `1 unit north` relative to the ship. The waypoint is relative to the ship; that is, if the ship moves, the waypoint moves with it.
+64 is written to address 8 instead, overwriting the value that was there previously.
 
-For example, using the same instructions as above:
-* `F10` moves the ship to the waypoint 10 times (a total of `100 units east` and `10 units north`), leaving the ship at `east 100`, `north 10`. The waypoint stays `10 units east` and `1 unit north` of the ship.
-* `N3` moves the waypoint 3 units north to `10 units east` and `4 units north` of the ship. The ship remains at `east 100`, `north 10`.
-* `F7` moves the ship to the waypoint 7 times (a total of `70 units east` and `28 units north`), leaving the ship at `east 170`, `north 38`. The waypoint stays `10 units east` and `4 units north` of the ship.
-* `R90` rotates the waypoint around the ship clockwise 90 degrees, moving it to `4 units east` and `10 units south` of the ship. The ship remains at `east 170`, `north 38`.
-* `F11` moves the ship to the waypoint 11 times (a total of 44 units east and 110 units south), leaving the ship at `east 214`, `south 72`. The waypoint stays `4 units east` and `10 units south` of the ship.
+To initialize your ferry's docking program, you need the sum of all values left in memory after the initialization program completes. (The entire 36-bit address space begins initialized to the value 0 at every address.) In the above example, only two values in memory are not zero - 101 (at address 7) and 64 (at address 8) - producing a sum of 165.
 
-After these operations, the ship's Manhattan distance from its starting position is `214 + 72 = 286`.
-
-Figure out where the navigation instructions actually lead. What is the Manhattan distance between that location and the ship's starting position?
+Execute the initialization program. What is the sum of all values left in memory after it completes?
 
 ```
-Your puzzle answer was 138669.
+Your puzzle answer was 5055782549997.
+```
+
+## Part 2
+
+For some reason, the sea port's computer system still can't communicate with your ferry's docking program. It must be using version 2 of the decoder chip!
+
+A version 2 decoder chip doesn't modify the values being written at all. Instead, it acts as a memory address decoder. Immediately before a value is written to memory, each bit in the bitmask modifies the corresponding bit of the destination memory address in the following way:
+```
+If the bitmask bit is 0, the corresponding memory address bit is unchanged.
+If the bitmask bit is 1, the corresponding memory address bit is overwritten with 1.
+If the bitmask bit is X, the corresponding memory address bit is floating.
+```
+
+A floating bit is not connected to anything and instead fluctuates unpredictably. In practice, this means the floating bits will take on all possible values, potentially causing many memory addresses to be written all at once!
+
+For example, consider the following program:
+```
+mask = 000000000000000000000000000000X1001X
+mem[42] = 100
+mask = 00000000000000000000000000000000X0XX
+mem[26] = 1
+```
+
+When this program goes to write to memory address 42, it first applies the bitmask:
+```
+address: 000000000000000000000000000000101010  (decimal 42)
+mask:    000000000000000000000000000000X1001X
+result:  000000000000000000000000000000X1101X
+```
+
+After applying the mask, four bits are overwritten, three of which are different, and two of which are floating. Floating bits take on every possible combination of values; with two floating bits, four actual memory addresses are written:
+```
+000000000000000000000000000000011010  (decimal 26)
+000000000000000000000000000000011011  (decimal 27)
+000000000000000000000000000000111010  (decimal 58)
+000000000000000000000000000000111011  (decimal 59)
+```
+
+Next, the program is about to write to memory address 26 with a different bitmask:
+```
+address: 000000000000000000000000000000011010  (decimal 26)
+mask:    00000000000000000000000000000000X0XX
+result:  00000000000000000000000000000001X0XX
+```
+
+This results in an address with three floating bits, causing writes to eight memory addresses:
+```
+000000000000000000000000000000010000  (decimal 16)
+000000000000000000000000000000010001  (decimal 17)
+000000000000000000000000000000010010  (decimal 18)
+000000000000000000000000000000010011  (decimal 19)
+000000000000000000000000000000011000  (decimal 24)
+000000000000000000000000000000011001  (decimal 25)
+000000000000000000000000000000011010  (decimal 26)
+000000000000000000000000000000011011  (decimal 27)
+```
+
+The entire 36-bit address space still begins initialized to the value 0 at every address, and you still need the sum of all values left in memory at the end of the program. In this example, the sum is 208.
+
+Execute the initialization program using an emulator for a version 2 decoder chip. What is the sum of all values left in memory after it completes?
+
+```
+Your puzzle answer was 4795970362286.
 ```
