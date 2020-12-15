@@ -9329,9 +9329,7 @@ def day14():
 
 
 def day15():
-    return [
-
-    ]
+    return [0,1,4,13,15,12,16]
 
 
 def day16():
