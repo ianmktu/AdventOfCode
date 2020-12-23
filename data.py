@@ -12442,10 +12442,8 @@ def day22():
 
 
 def day23():
-    return [
-
-    ]
-
+    return "925176834"
+    
 
 def day24():
     return [
